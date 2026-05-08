@@ -1,7 +1,10 @@
-import { MapPin, Clock, Info, User, Phone } from 'lucide-react';
+import { useState } from 'react';
+import { MapPin, Clock, Info, User, Phone, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, status }) => {
+  const [showContactInfo, setShowContactInfo] = useState(false);
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Available': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
@@ -19,11 +22,12 @@ const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, 
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-white dark:bg-dark-card rounded-2xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-800 flex flex-col h-full hover:shadow-xl transition-shadow"
-    >
+    <>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white dark:bg-dark-card rounded-2xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-800 flex flex-col h-full hover:shadow-xl transition-shadow"
+      >
       {/* Image Container */}
       <div className="relative h-48 w-full bg-gray-200 dark:bg-gray-700">
         {food.imageUrl ? (
@@ -73,12 +77,12 @@ const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, 
         <div className="flex flex-col gap-2 mt-4">
           <div className="flex gap-2">
             {food.contactNumber && (
-              <a 
-                href={`tel:${food.contactNumber}`}
+              <button 
+                onClick={() => setShowContactInfo(true)}
                 className="flex-1 flex justify-center items-center gap-2 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition shadow-md"
               >
                 <Phone size={18} /> Contact
-              </a>
+              </button>
             )}
             {isNgo && food.status === 'Available' && (
               <button 
@@ -108,6 +112,68 @@ const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, 
         </div>
       </div>
     </motion.div>
+
+      {showContactInfo && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={() => setShowContactInfo(false)}>
+          <motion.div 
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="bg-white dark:bg-dark-card rounded-2xl p-6 max-w-sm w-full shadow-2xl relative border border-gray-100 dark:border-gray-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowContactInfo(false)}
+              className="absolute top-4 right-4 p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-300 transition"
+            >
+              <X size={20} />
+            </button>
+            
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Donor Contact Details</h3>
+            
+            <div className="space-y-5">
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                  <User className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{food.donor?.name || 'Unknown'}</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-green-500/10 rounded-lg shrink-0">
+                  <Phone className="w-5 h-5 text-green-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Phone Number</p>
+                  <a href={`tel:${food.contactNumber}`} className="font-semibold text-green-600 dark:text-green-400 hover:underline">
+                    {food.contactNumber}
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-blue-500/10 rounded-lg shrink-0">
+                  <MapPin className="w-5 h-5 text-blue-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Pickup Address</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{food.pickupAddress}</p>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowContactInfo(false)}
+              className="w-full mt-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            >
+              Done
+            </button>
+          </motion.div>
+        </div>
+      )}
+    </>
   );
 };
 
