@@ -40,9 +40,8 @@ const DonateFood = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        });
-        imageUrl = `http://localhost:5000${data.image}`;
-      } else {
+        imageUrl = `https://foodbridge-api-p4hv.onrender.com${data.image}`;
+
         // Fallback Placeholder if no image is uploaded
         imageUrl = "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"; 
       }
