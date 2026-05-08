@@ -1,4 +1,4 @@
-import { MapPin, Clock, Info, User } from 'lucide-react';
+import { MapPin, Clock, Info, User, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, status }) => {
@@ -70,17 +70,27 @@ const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, 
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2 mt-4">
-          {isNgo && food.status === 'Available' && (
-            <button 
-              onClick={() => onRequest(food._id)}
-              className="flex-1 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition shadow-md"
-            >
-              Request Food
-            </button>
-          )}
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="flex gap-2">
+            {food.contactNumber && (
+              <a 
+                href={`tel:${food.contactNumber}`}
+                className="flex-1 flex justify-center items-center gap-2 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition shadow-md"
+              >
+                <Phone size={18} /> Contact
+              </a>
+            )}
+            {isNgo && food.status === 'Available' && (
+              <button 
+                onClick={() => onRequest(food._id)}
+                className="flex-1 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition shadow-md"
+              >
+                Request Food
+              </button>
+            )}
+          </div>
           {isAdmin && (
-            <>
+            <div className="flex gap-2">
               <button 
                 onClick={() => onEdit(food)} 
                 className="flex-1 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition shadow-md"
@@ -93,7 +103,7 @@ const FoodCard = ({ food, onRequest, isNgo, isDonor, isAdmin, onEdit, onDelete, 
               >
                 Delete
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
