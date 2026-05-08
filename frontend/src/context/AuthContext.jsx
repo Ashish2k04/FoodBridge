@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('https://foodbridge-api-p4hv.onrender.com/api/auth/login', { email, password });
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('Logged in successfully!');
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/register', userData);
+      const { data } = await axios.post('https://foodbridge-api-p4hv.onrender.com/api/auth/register', userData);
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('Registered successfully!');
